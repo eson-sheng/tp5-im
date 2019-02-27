@@ -17,7 +17,8 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "topthink/framework": "5.0.*"
+        "topthink/framework": "5.0.*",
+        "ext-gd": "*"
     },
     "autoload": {
         "psr-4": {
