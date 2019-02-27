@@ -33,6 +33,8 @@ class Redis extends Driver
         'prefix'     => '',
     ];
 
+    public $handler = null;
+
     /**
      * 构造函数
      * @param array $options 缓存参数

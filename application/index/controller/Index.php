@@ -23,5 +23,9 @@ class Index
         $IMApiModel = new \app\api\model\IMApi();
         $info = $IMApiModel->getUinfoss(['10001']);
         dump($info);
+
+        /*测试redis服务*/
+        $redis = new \think\Cache\driver\Redis();
+        dump($redis->handler->ping());
     }
 }
