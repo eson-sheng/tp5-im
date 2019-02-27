@@ -9,7 +9,7 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-return [
+$database = [
     // 数据库类型
     'type'            => 'mysql',
     // 服务器地址
@@ -53,3 +53,10 @@ return [
     // 是否需要进行SQL性能分析
     'sql_explain'     => false,
 ];
+
+if (is_file(__DIR__ . '/local_database.php')) {
+    $local_database = require __DIR__ . '/local_database.php';
+    $database = array_merge($database, $local_database);
+}
+
+return $database;

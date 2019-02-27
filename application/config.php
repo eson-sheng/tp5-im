@@ -9,7 +9,7 @@
 // | Author: liu21st <liu21st@gmail.com>
 // +----------------------------------------------------------------------
 
-return [
+$config = [
     // +----------------------------------------------------------------------
     // | 应用设置
     // +----------------------------------------------------------------------
@@ -241,3 +241,10 @@ return [
         'list_rows' => 15,
     ],
 ];
+
+if (is_file(__DIR__ . '/local_config.php')) {
+    $local_config = require __DIR__ . '/local_config.php';
+    $config = array_merge($config, $local_config);
+}
+
+return $config;
