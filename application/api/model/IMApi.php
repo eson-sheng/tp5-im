@@ -19,14 +19,12 @@ class IMApi
 
     /**
      * 参数初始化
-     * @param $AppKey
-     * @param $AppSecret
      * @param $RequestType [选择php请求方式，fsockopen或curl,若为curl方式，请检查php配置是否开启]
      */
-    public function __construct ($AppKey, $AppSecret, $RequestType = 'curl')
+    public function __construct ($RequestType = 'curl')
     {
-        $this->AppKey = $AppKey;
-        $this->AppSecret = $AppSecret;
+        $this->AppKey = \think\Config::get()['im_appkey'];
+        $this->AppSecret = \think\Config::get()['im_appsecret'];
         $this->RequestType = $RequestType;
     }
 

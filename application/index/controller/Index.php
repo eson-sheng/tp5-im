@@ -12,7 +12,16 @@ class Index
 
     public function test()
     {
+        /*测试数据库*/
         $ret = Db::name('test')->find();
         dump($ret);
+
+        /*测试配置文件*/
+        dump(\think\Config::get());
+
+        /*测试网易云信api*/
+        $IMApiModel = new \app\api\model\IMApi();
+        $info = $IMApiModel->getUinfoss(['10001']);
+        dump($info);
     }
 }
