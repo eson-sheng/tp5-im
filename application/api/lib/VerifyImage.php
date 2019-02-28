@@ -8,7 +8,11 @@
 
 namespace app\api\lib;
 
-
+/**
+ * 图片验证码处理类
+ * Class VerifyImage
+ * @package app\api\lib
+ */
 class VerifyImage
 {
     private $verifyCode = NULL;
@@ -19,7 +23,7 @@ class VerifyImage
      */
     private function createCode ()
     {
-        $session = SessionTools::get('api');
+        $session = &SessionTools::get('api');
         $this->verifyCode = $session['img_code'];
         return $this->verifyCode;
     }

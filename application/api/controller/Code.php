@@ -8,9 +8,14 @@
 
 namespace app\api\controller;
 
-use think\Controller;
 use app\api\lib\SessionTools;
+use think\Controller;
 
+/**
+ * 验证码接口类
+ * Class Code
+ * @package app\api\controller
+ */
 class Code extends Controller
 {
     /**
@@ -28,5 +33,19 @@ class Code extends Controller
         // 设置接口输出数据
         $obj = new \app\api\lib\VerifyImage();
         $obj->createImage();
+    }
+
+    /**
+     * /api/code/tel
+     * 发送手机验证码
+     * @return \think\response\Json
+     */
+    public function tel ()
+    {
+        $tel = $this->request->post('tel', FALSE);
+        $img_code = $this->request->post('img_code', FALSE);
+
+        $validate_code = new \app\api\validate\Code();
+        return $validate_code->code_tel($tel, $img_code);
     }
 }

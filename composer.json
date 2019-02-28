@@ -19,7 +19,8 @@
         "php": ">=7.0.0",
         "topthink/framework": "5.0.*",
         "ext-gd": "*",
-        "ext-redis": "*"
+        "ext-redis": "*",
+        "ext-json": "*"
     },
     "autoload": {
         "psr-4": {

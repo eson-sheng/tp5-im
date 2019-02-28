@@ -8,7 +8,11 @@
 
 namespace app\api\lib;
 
-
+/**
+ * 验证码处理类
+ * Class VerifyCode
+ * @package app\api\lib
+ */
 class VerifyCode
 {
     /**
@@ -25,5 +29,14 @@ class VerifyCode
             $str .= $strPol[rand(0, $max)]; //rand($min,$max)生成介于min和max两个数之间的一个随机整数
         }
         return $str;
+    }
+
+    /**
+     * @param $tel
+     * @param $code
+     */
+    public function sendTelMes ($tel, $code)
+    {
+        /*短信服务尚未申请*/
     }
 }

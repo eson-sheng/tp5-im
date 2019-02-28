@@ -8,12 +8,18 @@
 
 namespace app\api\lib;
 
-
+/**
+ * 会话处理类
+ * Class SessionTools
+ * @package app\api\lib
+ */
 class SessionTools
 {
     public static function init()
     {
-
+        if (!session_id()){
+            session_start();
+        }
     }
 
     public static function &get($key, $default = null)
