@@ -27,7 +27,7 @@ class Code
     public function send_tel_code ($tel)
     {
         /*实例化redis类*/
-        $redis = new \think\Cache\driver\Redis();
+        $redis = new \think\cache\driver\Redis();
         /*判断tel是否存在，重复发送*/
         if ($redis->handler->get($tel)) {
             $this->errno = ResponseCode::MESSAGE_CODE_IS_SEND;

@@ -40,7 +40,7 @@ class User extends Validate
         }
 
         /*检查昵称是否重复*/
-        if (\app\api\model\user::get(['nick' => $nick])) {
+        if (\app\api\model\User::get(['nick' => $nick])) {
             return ResponseTools::return_error(ResponseCode::NICK_REPETITION);
         }
 
@@ -56,7 +56,7 @@ class User extends Validate
         }
 
         /*检查手机号码是否注册*/
-        if (\app\api\model\user::get(['tel' => $tel])) {
+        if (\app\api\model\User::get(['tel' => $tel])) {
             return ResponseTools::return_error(ResponseCode::TELEPHONE_REGISTERED);
         }
 
@@ -72,7 +72,7 @@ class User extends Validate
         }
 
         /*通过手机号码生成新账号*/
-        $user_model = new \app\api\model\user();
+        $user_model = new \app\api\model\User();
         $data = $user_model->user_add_for_tel(
             $tel,
             $password,
@@ -97,7 +97,7 @@ class User extends Validate
         }
 
         /*检查昵称是否重复*/
-        if (\app\api\model\user::get(['nick' => $nick])) {
+        if (\app\api\model\User::get(['nick' => $nick])) {
             return ResponseTools::return_error(ResponseCode::NICK_REPETITION);
         }
 

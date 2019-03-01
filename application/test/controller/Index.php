@@ -33,7 +33,7 @@ class Index extends Controller
         dump($info);
 
         /*测试redis服务*/
-        $redis = new \think\Cache\driver\Redis();
+        $redis = new \think\cache\driver\Redis();
         dump($redis->handler->ping());
 
         \SeasLog::info('test');
