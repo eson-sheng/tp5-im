@@ -6,7 +6,8 @@
     "php": ">=7.0.0",
     "topthink/framework": "5.0.*",
     "ext-gd": "*",
-    "ext-redis": "*"
+    "ext-redis": "*",
+    "ext-seaslog": "*"
 }
 ```
 
@@ -14,10 +15,10 @@
 ```nginxconfig
 server {
     listen 80;
-    server_name tp5-im;
-    access_log  tp5-im_access.log;
-    error_log   tp5-im_error.log;
-    set         $root   /usr/local/www/tp5-im/public;
+    server_name [域名];
+    access_log  /home/wwwlogs/tp5-im_access.log;
+    error_log   /home/wwwlogs/tp5-im_error.log;
+    set         $root   /home/www/tp5-im/public;
     location ~ .*\.(gif|jpg|jpeg|bmp|png|ico|txt|js|css)$
     {
         root $root;
@@ -34,12 +35,12 @@ server {
         }
     }
     location ~ .+\.php($|/) {
-        fastcgi_pass    127.0.0.1:9000;
+        fastcgi_pass    unix:/tmp/php-cgi.sock;
         fastcgi_split_path_info ^((?U).+.php)(/?.+)$;
-        fastcgi_param PATH_INFO $fastcgi_path_info;
-        fastcgi_param PATH_TRANSLATED $document_root$fastcgi_path_info;
-        fastcgi_param SCRIPT_FILENAME $root$fastcgi_script_name;
-        include       fastcgi_params;
+        fastcgi_param   PATH_INFO          $fastcgi_path_info;
+        fastcgi_param   PATH_TRANSLATED    $document_root$fastcgi_path_info;
+        fastcgi_param   SCRIPT_FILENAME    $root$fastcgi_script_name;
+        include         fastcgi_params;
     }
 }
 ```
@@ -49,18 +50,26 @@ server {
 
 # 配置文件
 - `application/local_config.php` 
+
 ```php
 <?php
+$SeasLog_base_path = __DIR__ . '/../runtime/seaslog';
+SeasLog::setBasePath($SeasLog_base_path);
+
 return [
     // 应用调试模式
-    'app_debug' => true,
+    'app_debug'                 => true,
     // 网易云信AppKey
-    'IM_AppKey' => '***',
+    'IM_AppKey'                 => '***',
     // 网易云信AppSecret
-    'IM_AppSecret' => '***',
+    'IM_AppSecret'              => '***',
+    // SeasLog日志配置
+    'SeasLog_base_path'         => $SeasLog_base_path,
 ];
 ```
+
 - `application/local_database.php`
+
 ```php
 <?php
 return [
