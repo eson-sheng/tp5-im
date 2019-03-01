@@ -35,7 +35,7 @@ class ResponseTools
         return json([
             'errno' => $errno,
             'data' => $data,
-            'status' => $status,
+//            'status' => $status,
             'error_msg' => $error_msg,
         ]);
     }

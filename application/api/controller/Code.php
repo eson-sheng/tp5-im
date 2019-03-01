@@ -42,8 +42,8 @@ class Code extends Controller
      */
     public function tel ()
     {
-        $tel = $this->request->post('tel', FALSE);
-        $img_code = $this->request->post('img_code', FALSE);
+        $tel = $this->request->param('tel', FALSE);
+        $img_code = $this->request->param('img_code', FALSE);
 
         $validate_code = new \app\api\validate\Code();
         return $validate_code->code_tel($tel, $img_code);

@@ -20,6 +20,12 @@ use think\Validate;
  */
 class Code extends Validate
 {
+    /**
+     * 检查手机发送验证码逻辑
+     * @param $tel
+     * @param $img_code
+     * @return \think\response\Json
+     */
     public function code_tel ($tel, $img_code)
     {
         $session = &SessionTools::get('api');
@@ -77,5 +83,38 @@ class Code extends Validate
     {
         $pattern = '/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/';
         return preg_match($pattern, $tel) ? FALSE : TRUE;
+    }
+
+    /**
+     * 检查短信验证码
+     * @param $tel
+     * @param $code
+     * @return bool|\think\response\Json
+     */
+    public function checkout_tel_code ($tel, $code)
+    {
+        $session = &SessionTools::get('api');
+
+        /*检查过期时间是否存在*/
+        if (empty($session['check_code_time'])) {
+            return ResponseTools::return_error(ResponseCode::MESSAGE_CODE_NOT_SEND);
+        }
+
+        /*检查验证码是否过期*/
+        $out_time = time() + 600;
+        if ($session['check_code_time'] > $out_time) {
+            return ResponseTools::return_error(ResponseCode::MESSAGE_CODE_EXPIRED);
+        }
+
+        /*检查是否是发送的手机号*/
+        if ($tel != $session['mobile']) {
+            return ResponseTools::return_error(ResponseCode::TELEPHONE_ERROR);
+        }
+
+        if ($code != $session['check_code']) {
+            return ResponseTools::return_error(ResponseCode::MESSAGE_CODE_ERROR);
+        }
+
+        return FALSE;
     }
 }

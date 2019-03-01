@@ -35,12 +35,22 @@ class ResponseCode
     const MESSAGE_CODE_NOT_SEND = -1007;
     // 短信验证码已过期
     const MESSAGE_CODE_EXPIRED = -1008;
+    // 昵称不符合规范，字符大于1小于6
+    const NICK_NOT = -1009;
     // 图片验证码码错误
     const IMG_CODE_ERROR = -1010;
+    // 昵称重复
+    const NICK_REPETITION = -1011;
+    // 头像格式错误，无法存储。
+    const PIC_ERROR = -1012;
     // 图形验证码尚未请求
     const IMG_CODE_NOT_REQ = -1019;
     // 图形验证码过期
     const IMG_CODE_EXPIRED = -1020;
+    // 获取数据出错
+    const GET_DATA_FAILED = -1203;
+    // 参数不正确
+    const INCORRECT_PARAMETER = -1108;
 
     const CODE_MAP = [
         self::SUCCESS => 'OKAY',
@@ -56,5 +66,10 @@ class ResponseCode
         self::IMG_CODE_ERROR => '图片验证码码错误',
         self::IMG_CODE_NOT_REQ => '图形验证码尚未请求',
         self::IMG_CODE_EXPIRED => '图形验证码过期',
+        self::GET_DATA_FAILED => '获取数据出错',
+        self::NICK_NOT => '昵称不符合规范，字符大于1小于6',
+        self::NICK_REPETITION => '昵称重复',
+        self::PIC_ERROR => '头像格式错误，无法存储。',
+        self::INCORRECT_PARAMETER => '参数不正确',
     ];
 }

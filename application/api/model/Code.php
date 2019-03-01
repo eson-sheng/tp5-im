@@ -36,7 +36,7 @@ class Code
         /*实例化验证码类*/
         $VerifyCode = new \app\api\lib\VerifyCode();
         /*获取验证码字符串*/
-        $code = $VerifyCode->get_code();
+        $code = $VerifyCode->get_code_tel();
         /*存储redis缓存*/
         $redis->handler->setex($tel,60,$code);
         /*记录会话时间*/

@@ -13,6 +13,11 @@ use think\Controller;
 
 class Index extends Controller
 {
+    /**
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
     public function index()
     {
         /*测试数据库*/
@@ -30,5 +35,7 @@ class Index extends Controller
         /*测试redis服务*/
         $redis = new \think\Cache\driver\Redis();
         dump($redis->handler->ping());
+
+        \SeasLog::info('test');
     }
 }
