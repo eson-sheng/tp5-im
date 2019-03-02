@@ -55,6 +55,14 @@ class ResponseCode
     const INCORRECT_PARAMETER = -1108;
     // 数据保存重复或失败
     const DATA_DUPLICATION = -1111;
+    // 用户已经登录
+    const USER_IS_LOGIN = -1112;
+    // 账号信息不存在
+    const NOT_HAVE_USERNAME = -1041;
+    // 用户名或密码不正确
+    const PASSWORD_AUTHENTICATION_FAILED = -1402;
+    // 用户未登录
+    const NOT_LOGIN = -1403;
 
     const CODE_MAP = [
         self::SUCCESS => 'OKAY',
@@ -77,5 +85,9 @@ class ResponseCode
         self::INCORRECT_PARAMETER => '参数不正确',
         self::TELEPHONE_NOT_REGISTERED => '手机号码未注册',
         self::DATA_DUPLICATION => '数据保存重复或失败',
+        self::USER_IS_LOGIN => '用户已经登录',
+        self::NOT_HAVE_USERNAME => '账号信息不存在',
+        self::PASSWORD_AUTHENTICATION_FAILED => '用户名或密码不正确',
+        self::NOT_LOGIN => '用户未登录',
     ];
 }

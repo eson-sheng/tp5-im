@@ -18,6 +18,16 @@ use think\response\Json;
  */
 class ResponseTools
 {
+    public static function checkout_login ()
+    {
+        $session = &SessionTools::get('api');
+        if (!empty($session['is_login'])){
+            return TRUE;
+        } else {
+            return FALSE;
+        }
+    }
+
     /**
      * 返回错误信息
      * @param $errno

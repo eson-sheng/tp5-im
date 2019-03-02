@@ -109,6 +109,10 @@ class User extends Model
         $session = &SessionTools::get('api');
         unset($session['check_code_time']);
 
+        /*登录标示 - 注册自动登录*/
+        $session['is_login'] = TRUE;
+        $session['info'] = $user_res;
+
         /*业务 - 创建云信ID*/
         $IMApi_model = new IMApi();
         $IMApi_res = $IMApi_model->createUserIds(
@@ -122,6 +126,60 @@ class User extends Model
         \SeasLog::info("\n{$log}\n", [], "IMApi_res");
 
         return $user_res;
+    }
+
+    /**
+     * 数据库执行登录查询逻辑
+     * @param $username
+     * @param $password
+     * @return array
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function login ($username, $password)
+    {
+        $mi = $this->_password_generate($password);
+
+        $user = new User();
+        $user_res = $user
+            ->whereLike('tel', $username, 'OR')
+            ->whereLike('email', $username, 'OR')
+            ->whereLike('acid', $username, 'OR')
+            ->find();
+
+        if (!$user_res) {
+            $this->error = ResponseCode::NOT_HAVE_USERNAME;
+            return [];
+        }
+
+        $user_res->toArray();
+        if ($mi != $user_res['password']) {
+            $this->error = ResponseCode::PASSWORD_AUTHENTICATION_FAILED;
+            return [];
+        }
+
+        unset($user_res['password'],$user_res['status'],$user_res['update_time']);
+        $session = &SessionTools::get('api');
+        $session['is_login'] = TRUE;
+        $session['info'] = $user_res;
+        $this->error = ResponseCode::SUCCESS;
+        return $user_res;
+    }
+
+    /**
+     * 执行退出登录
+     * @return array
+     */
+    public function logout ()
+    {
+        $session = &SessionTools::get('api');
+        unset($session['is_login'], $session['info']);
+        $this->error = ResponseCode::SUCCESS;
+        return [
+            'tip' => 'OK. Bye-Bye'
+        ];
     }
 
     /**

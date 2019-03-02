@@ -15,6 +15,50 @@ use think\Validate;
 class User extends Validate
 {
     /**
+     * 验证登录逻辑
+     * @param $username
+     * @param $password
+     * @return \think\response\Json
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
+     */
+    public function login ($username, $password)
+    {
+        /*检查是否登录 - 已登录*/
+        if (ResponseTools::checkout_login()) {
+            return ResponseTools::return_error(ResponseCode::USER_IS_LOGIN);
+        }
+
+        /*参数必传*/
+        if (!$username || !$password) {
+            return ResponseTools::return_error(ResponseCode::PARAMETER_INCOMPLETENESS);
+        }
+
+        /*模块查找用户*/
+        $user_model = new \app\api\model\User();
+        $data = $user_model->login($username, $password);
+        return ResponseTools::return_error($user_model->error, $data);
+    }
+
+    /**
+     * 验证退出登录
+     * @return \think\response\Json
+     */
+    public function logout ()
+    {
+        /*检查是否登录 - 未登录*/
+        if (!ResponseTools::checkout_login()) {
+            return ResponseTools::return_error(ResponseCode::NOT_LOGIN);
+        }
+
+        $user_model = new \app\api\model\User();
+        $data = $user_model->logout();
+        return ResponseTools::return_error($user_model->error, $data);
+    }
+
+    /**
      * 手机注册检查逻辑
      * @param $tel
      * @param $code
@@ -27,7 +71,10 @@ class User extends Validate
      */
     public function create_for_tel ($tel, $code, $password, $nick, $sex, $base64)
     {
-        /*检查是否登录 - FIXME*/
+        /*检查是否登录 - 已登录*/
+        if (ResponseTools::checkout_login()) {
+            return ResponseTools::return_error(ResponseCode::USER_IS_LOGIN);
+        }
 
         /*检查必要参数*/
         if (!$tel || !$code || !$password || !$nick || !$sex) {
@@ -93,7 +140,10 @@ class User extends Validate
      */
     public function forget_for_tel ($tel, $code, $password)
     {
-        /*检查是否登录 - FIXME*/
+        /*检查是否登录 - 已登录*/
+        if (ResponseTools::checkout_login()) {
+            return ResponseTools::return_error(ResponseCode::USER_IS_LOGIN);
+        }
 
         /*检查必要参数*/
         if (!$tel || !$code || !$password) {

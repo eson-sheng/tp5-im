@@ -13,6 +13,31 @@ use think\Controller;
 class User extends Controller
 {
     /**
+     * /api/user/login
+     * 登录
+     * @return \think\response\Json
+     */
+    public function login ()
+    {
+        $username = $this->request->param('username', FALSE);
+        $password = $this->request->param('password', FALSE);
+
+        $validate_user = new \app\api\validate\User();
+        return $validate_user->login($username, $password);
+    }
+
+    /**
+     * /api/user/logout
+     * 退出登录
+     * @return \think\response\Json
+     */
+    public function logout ()
+    {
+        $validate_user = new \app\api\validate\User();
+        return $validate_user->logout();
+    }
+
+    /**
      * /api/user/create_for_tel
      * 手机注册接口
      * @return bool|\think\response\Json
