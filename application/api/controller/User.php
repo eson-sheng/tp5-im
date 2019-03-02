@@ -16,6 +16,10 @@ class User extends Controller
      * /api/user/login
      * 登录
      * @return \think\response\Json
+     * @throws \think\Exception
+     * @throws \think\db\exception\DataNotFoundException
+     * @throws \think\db\exception\ModelNotFoundException
+     * @throws \think\exception\DbException
      */
     public function login ()
     {
