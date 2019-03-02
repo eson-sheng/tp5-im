@@ -123,4 +123,29 @@ class User extends Model
 
         return $user_res;
     }
+
+    /**
+     * 忘记密码手机重置数据库逻辑
+     * @param $tel
+     * @param $password
+     * @return array
+     * @throws \think\exception\DbException
+     */
+    public function forget_for_tel ($tel, $password)
+    {
+        /*删除验证时间*/
+        $session = &SessionTools::get('api');
+        unset($session['check_code_time']);
+        /*处理密码加密*/
+        $mi = $this->_password_generate($password);
+        /*获取数据并修改*/
+        $user_obj = User::get(['tel' => $tel]);
+        $user_obj->password = $mi;
+        if ($user_obj->save()) {
+            $this->error = ResponseCode::SUCCESS;
+            return [];
+        }
+        $this->error = ResponseCode::DATA_DUPLICATION;
+        return [];
+    }
 }

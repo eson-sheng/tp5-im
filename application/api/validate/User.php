@@ -84,6 +84,46 @@ class User extends Validate
     }
 
     /**
+     * 忘记密码手机重置检查逻辑
+     * @param $tel
+     * @param $code
+     * @param $password
+     * @return bool|\think\response\Json
+     * @throws \think\exception\DbException
+     */
+    public function forget_for_tel ($tel, $code, $password)
+    {
+        /*检查是否登录 - FIXME*/
+
+        /*检查必要参数*/
+        if (!$tel || !$code || !$password) {
+            return ResponseTools::return_error(ResponseCode::PARAMETER_INCOMPLETENESS);
+        }
+
+        /*检查手机号码是否合法*/
+        $code_validate = new Code();
+        if ($code_validate->checkout_tel($tel)) {
+            return ResponseTools::return_error(ResponseCode::TELEPHONE_ERROR);
+        }
+
+        /*检查手机号码是否注册*/
+        if (!\app\api\model\User::get(['tel' => $tel])) {
+            return ResponseTools::return_error(ResponseCode::TELEPHONE_NOT_REGISTERED);
+        }
+
+        /*检查短信验证码合法性*/
+        $ret = $code_validate->checkout_tel_code($tel, $code);
+        if ($ret) {
+            return $ret;
+        }
+
+        /*通过手机号修改密码*/
+        $user_model = new \app\api\model\User();
+        $data = $user_model->forget_for_tel($tel, $password);
+        return ResponseTools::return_error($user_model->error, $data);
+    }
+
+    /**
      * 检查昵称重复
      * @param $nick
      * @return \think\response\Json

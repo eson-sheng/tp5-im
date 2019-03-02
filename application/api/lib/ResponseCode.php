@@ -43,6 +43,8 @@ class ResponseCode
     const NICK_REPETITION = -1011;
     // 头像格式错误，无法存储。
     const PIC_ERROR = -1012;
+    // 手机号码未注册
+    const TELEPHONE_NOT_REGISTERED = -1013;
     // 图形验证码尚未请求
     const IMG_CODE_NOT_REQ = -1019;
     // 图形验证码过期
@@ -51,6 +53,8 @@ class ResponseCode
     const GET_DATA_FAILED = -1203;
     // 参数不正确
     const INCORRECT_PARAMETER = -1108;
+    // 数据保存重复或失败
+    const DATA_DUPLICATION = -1111;
 
     const CODE_MAP = [
         self::SUCCESS => 'OKAY',
@@ -71,5 +75,7 @@ class ResponseCode
         self::NICK_REPETITION => '昵称重复',
         self::PIC_ERROR => '头像格式错误，无法存储。',
         self::INCORRECT_PARAMETER => '参数不正确',
+        self::TELEPHONE_NOT_REGISTERED => '手机号码未注册',
+        self::DATA_DUPLICATION => '数据保存重复或失败',
     ];
 }

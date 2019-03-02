@@ -39,6 +39,22 @@ class User extends Controller
     }
 
     /**
+     * /api/user/forget_for_tel
+     * 忘记密码手机重置
+     * @return bool|\think\response\Json
+     * @throws \think\exception\DbException
+     */
+    public function forget_for_tel ()
+    {
+        $tel = $this->request->param('tel', FALSE);
+        $code = $this->request->param('code', FALSE);
+        $password = $this->request->param('password', FALSE);
+
+        $validate_user = new \app\api\validate\User();
+        return $validate_user->forget_for_tel($tel, $code, $password);
+    }
+
+    /**
      * /api/user/nick_repetition
      * 昵称重复接口
      * @return \think\response\Json
