@@ -372,4 +372,28 @@ class User extends Model
         $user_res['IMApi_res'] = $IMApi_res;
         return $user_res;
     }
+
+    /**
+     * 搜索游湖数据库逻辑
+     * @param $search
+     * @return array
+     */
+    public function search ($search)
+    {
+        $user = new User();
+        $user_res = $user
+            ->whereOr('tel', 'like',"%{$search}%")
+            ->whereOr('email', 'like',"%{$search}%")
+            ->whereOr('nick', 'like',"%{$search}%")
+            ->whereOr('acid', 'like',"%{$search}%")
+            ->column('nick,acid,tel,email');
+
+        if (!$user_res) {
+            $this->error = ResponseCode::NOT_HAVE_USERNAME;
+            return [];
+        }
+
+        $this->error = ResponseCode::SUCCESS;
+        return $user_res;
+    }
 }

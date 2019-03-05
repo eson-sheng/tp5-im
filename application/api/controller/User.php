@@ -168,4 +168,17 @@ class User extends Controller
         $validate_user = new \app\api\validate\User();
         return $validate_user->update_for_tel_or_email($email, $code, 'email');
     }
+
+    /**
+     * /api/user/search
+     * 用户搜索接口
+     * @return \think\response\Json
+     */
+    public function search ()
+    {
+        $search = $this->request->param('s', FALSE);
+
+        $validate_user = new \app\api\validate\User();
+        return $validate_user->search($search);
+    }
 }

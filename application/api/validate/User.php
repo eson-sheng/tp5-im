@@ -363,4 +363,27 @@ class User extends Validate
 
         return ResponseTools::return_error($user_model->error, $data);
     }
+
+    /**
+     * 搜索用户检查逻辑
+     * @param $search
+     * @return \think\response\Json
+     */
+    public function search ($search)
+    {
+        /*检查是否登录 - 未登录*/
+        if (!ResponseTools::checkout_login()) {
+            return ResponseTools::return_error(ResponseCode::NOT_LOGIN);
+        }
+
+        /*参数必传*/
+        if (!$search) {
+            return ResponseTools::return_error(ResponseCode::PARAMETER_INCOMPLETENESS);
+        }
+
+        /*模块查找用户*/
+        $user_model = new \app\api\model\User();
+        $data = $user_model->search($search);
+        return ResponseTools::return_error($user_model->error, $data);
+    }
 }
