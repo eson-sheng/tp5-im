@@ -77,7 +77,7 @@ class User extends Validate
         }
 
         /*检查必要参数*/
-        if (!$tel || !$code || !$password || !$nick || !$sex) {
+        if (!$tel || !$code || !$password || !$nick) {
             return ResponseTools::return_error(ResponseCode::PARAMETER_INCOMPLETENESS);
         }
 
