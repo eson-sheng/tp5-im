@@ -193,4 +193,102 @@ class User extends Validate
 
         return ResponseTools::return_error(ResponseCode::SUCCESS);
     }
+
+    /**
+     * 检查用户信息查询方式
+     * @param $acid
+     * @return \think\response\Json
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
+     */
+    public function info ($acid)
+    {
+        /*检查是否登录 - 未登录*/
+        if (!ResponseTools::checkout_login()) {
+            return ResponseTools::return_error(ResponseCode::NOT_LOGIN);
+        }
+
+        /*检查必要参数*/
+        if (!$acid) {
+            return ResponseTools::return_error(ResponseCode::PARAMETER_INCOMPLETENESS);
+        }
+
+        /*通过acid查看用户信息*/
+        $user_model = new \app\api\model\User();
+        $data = $user_model->info($acid);
+        return ResponseTools::return_error($user_model->error, $data);
+    }
+
+    /**
+     * 检查用户更新信息逻辑
+     * @param $nick
+     * @param $sex
+     * @param $birthday
+     * @param $sign
+     * @param $base64
+     * @return \think\response\Json
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
+     */
+    public function update ($nick, $sex, $birthday, $sign, $base64)
+    {
+        /*检查是否登录 - 未登录*/
+        if (!ResponseTools::checkout_login()) {
+            return ResponseTools::return_error(ResponseCode::NOT_LOGIN);
+        }
+
+        /*昵称检查*/
+        if ($nick) {
+            /*昵称字符数限制*/
+            if (strlen($nick) > 18 || strlen($nick) < 1) {
+                return ResponseTools::return_error(ResponseCode::NICK_NOT);
+            }
+
+            /*检查昵称是否重复*/
+            if (\app\api\model\User::get(['nick' => $nick])) {
+                return ResponseTools::return_error(ResponseCode::NICK_REPETITION);
+            }
+        }
+
+        /*性别检查*/
+        if ($sex) {
+            /*判断性别参数是否正确*/
+            if (!in_array(intval($sex), [0, 1])) {
+                return ResponseTools::return_error(ResponseCode::INCORRECT_PARAMETER);
+            }
+        }
+
+        /*生日时间检查格式是否正确*/
+        if ($birthday) {
+            /*检查手机号码是否合法*/
+            $code_validate = new Code();
+            if ($code_validate->checkout_time($birthday)) {
+                return ResponseTools::return_error(ResponseCode::ERROR_IN_TIME_FORMAT);
+            }
+        }
+
+        /*检查个性签名*/
+        if ($sign) {
+            /*字符数限制*/
+            if (strlen($sign) > 256 || strlen($sign) < 1) {
+                return ResponseTools::return_error(ResponseCode::NICK_NOT);
+            }
+        }
+
+        /*不传base64初始为空字符*/
+        if (!$base64) {
+            $base64 = '';
+        }
+
+        /*更新用户信息*/
+        $user_model = new \app\api\model\User();
+        $data = $user_model->update_info(
+            $nick,
+            $sex,
+            $birthday,
+            $sign,
+            $base64
+        );
+        return ResponseTools::return_error($user_model->error, $data);
+    }
 }

@@ -20,6 +20,14 @@ class SessionTools
         if (!session_id()){
             session_start();
         }
+
+        /*更新用户信息*/
+        if (!empty($_SESSION['api']['info'])){
+            $uid = $_SESSION['api']['info']['id'];
+            $user_res = \app\api\model\User::get($uid)->toArray();
+            unset($user_res['password'],$user_res['status'],$user_res['update_time']);
+            $_SESSION['api']['info'] = $user_res;
+        }
     }
 
     public static function &get($key, $default = null)

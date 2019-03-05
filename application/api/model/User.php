@@ -123,7 +123,7 @@ class User extends Model
         );
         /*日志记录*/
         $log = json_encode($IMApi_res);
-        \SeasLog::info("\n{$log}\n", [], "IMApi_res");
+        \SeasLog::info("\ncreateUserIds:\n{$log}\n", [], "IMApi_res");
 
         return $user_res;
     }
@@ -205,5 +205,103 @@ class User extends Model
         }
         $this->error = ResponseCode::DATA_DUPLICATION;
         return [];
+    }
+
+    /**
+     * 通过acid查询用户信息
+     * @param $acid
+     * @return array
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
+     */
+    public function info ($acid)
+    {
+        $user_obj = User::get(['acid' => $acid]);
+        if ($user_obj) {
+            $this->error = ResponseCode::SUCCESS;
+            return $user_obj->hidden([
+                'password',
+                'status',
+                'update_time',
+            ])->toArray();
+        }
+        $this->error = ResponseCode::NOT_HAVE_USERNAME;
+        return [];
+    }
+
+    /**
+     * 更新用户信息
+     * @param $nick
+     * @param $sex
+     * @param $birthday
+     * @param $sign
+     * @param $base64
+     * @return array
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
+     */
+    public function update_info ($nick, $sex, $birthday, $sign, $base64)
+    {
+        /*头像处理错误返回*/
+        $pic = $this->_pic($base64);
+        if (!empty($base64) && !$pic) {
+            $this->error = ResponseCode::PIC_ERROR;
+            return [];
+        }
+
+        $session = &SessionTools::get('api');
+        $uid = $session['info']['id'];
+        $user_obj = User::get($uid);
+
+        if ($nick) {
+            $user_obj->nick = $nick;
+        }
+
+        if (!empty($sex)) {
+            $user_obj->nick = $sex;
+        }
+
+        if ($birthday) {
+            $user_obj->birthday = $birthday;
+        }
+
+        if ($sign) {
+            $user_obj->sign = $sign;
+        }
+
+        if ($pic) {
+            $user_obj->pic = $pic;
+        }
+
+        if ($user_obj->save()) {
+            /*返回错误码*/
+            $this->error = ResponseCode::SUCCESS;
+        } else {
+            $this->error = ResponseCode::DATA_DUPLICATION;
+            return [];
+        }
+
+        /*业务 - 更新用户名片*/
+        $IMApi_model = new IMApi();
+        $IMApi_res = $IMApi_model->updateUinfo(
+            $user_obj->acid,
+            $user_obj->nick,
+            $user_obj->pic,
+            $user_obj->sign,
+            $user_obj->email,
+            strtotime($user_obj->birthday),
+            $user_obj->tel,
+            $user_obj->sex,
+            $user_obj->toJson()
+        );
+        /*日志记录*/
+        $log = json_encode($IMApi_res);
+        \SeasLog::info("\nupdateUinfo:\n{$log}\n", [], "IMApi_res");
+
+        return $user_obj->hidden([
+            'password',
+            'status',
+            'update_time',
+        ])->toArray();
     }
 }

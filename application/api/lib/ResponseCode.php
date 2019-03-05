@@ -63,6 +63,8 @@ class ResponseCode
     const PASSWORD_AUTHENTICATION_FAILED = -1402;
     // 用户未登录
     const NOT_LOGIN = -1403;
+    // 时间格式错误
+    const ERROR_IN_TIME_FORMAT = -1021;
 
     const CODE_MAP = [
         self::SUCCESS => 'OKAY',
@@ -89,5 +91,6 @@ class ResponseCode
         self::NOT_HAVE_USERNAME => '账号信息不存在',
         self::PASSWORD_AUTHENTICATION_FAILED => '用户名或密码不正确',
         self::NOT_LOGIN => '用户未登录',
+        self::ERROR_IN_TIME_FORMAT => '时间格式错误',
     ];
 }

@@ -96,4 +96,44 @@ class User extends Controller
         $validate_user = new \app\api\validate\User();
         return $validate_user->nick_repetition($nick);
     }
+
+    /**
+     * /api/user/info
+     * 获取用户信息
+     * @return \think\response\Json
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
+     */
+    public function info ()
+    {
+        $acid = $this->request->param('acid', FALSE);
+
+        $validate_user = new \app\api\validate\User();
+        return $validate_user->info($acid);
+    }
+
+    /**
+     * /api/user/update
+     * 更新用户信息
+     * @return \think\response\Json
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
+     */
+    public function update ()
+    {
+        $nick = $this->request->param('nick', FALSE);
+        $sex = $this->request->param('sex', FALSE);
+        $birthday = $this->request->param('birthday', FALSE);
+        $sign = $this->request->param('sign', FALSE);
+        $base64 = $this->request->param('base64', FALSE);
+
+        $validate_user = new \app\api\validate\User();
+        return $validate_user->update(
+            $nick,
+            $sex,
+            $birthday,
+            $sign,
+            $base64
+        );
+    }
 }
