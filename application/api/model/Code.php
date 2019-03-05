@@ -21,15 +21,17 @@ class Code
     public $errno = NULL;
 
     /**
-     * @param $tel
+     * 执行发送验证码信息
+     * @param $param
+     * @param string $type
      * @return bool
      */
-    public function send_tel_code ($tel)
+    public function send_code ($param, $type = '')
     {
         /*实例化redis类*/
         $redis = new \think\cache\driver\Redis();
         /*判断tel是否存在，重复发送*/
-        if ($redis->handler->get($tel)) {
+        if ($redis->handler->get($param)) {
             $this->errno = ResponseCode::MESSAGE_CODE_IS_SEND;
             return FALSE;
         }
@@ -38,14 +40,20 @@ class Code
         /*获取验证码字符串*/
         $code = $VerifyCode->get_code_tel();
         /*存储redis缓存*/
-        $redis->handler->setex($tel,60,$code);
+        $redis->handler->setex($param, 60, $code);
         /*记录会话时间*/
         $session = &SessionTools::get('api');
-        $session['mobile'] = $tel;
+        $session[$type] = $param;
         $session['check_code'] = $code;
         $session['check_code_time'] = time();
         /*发送验证码*/
-        $VerifyCode->sendTelMes($tel,$code);
+        if ($type == 'mobile') {
+            $VerifyCode->sendTelMes($param, $code);
+        }
+
+        if ($type == 'email') {
+            $VerifyCode->sendEmailMes($param, $code);
+        }
         return TRUE;
     }
 }

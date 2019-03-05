@@ -25,16 +25,22 @@ class ResponseCode
     const NOT_HAVE_MESSAGE_CODE = -1002;
     // 电话号码错误
     const TELEPHONE_ERROR = -1003;
+    // 邮箱地址错误
+    const EMAIL_ERROR = -1021;
     // 短信验证码错误
     const MESSAGE_CODE_ERROR = -1004;
-    // 电话号码已经注册
+    // 电话号码已经注册或存在
     const TELEPHONE_REGISTERED = -1005;
+    // 邮箱地址已经注册或存在
+    const EMAIL_REGISTERED = -1014;
     // 短信验证已经发送,请勿重复发送
     const MESSAGE_CODE_IS_SEND = -1006;
     // 短信验证码尚未发送
     const MESSAGE_CODE_NOT_SEND = -1007;
     // 短信验证码已过期
     const MESSAGE_CODE_EXPIRED = -1008;
+    // 验证码尚未发送
+    const CODE_NOT_SEND = -1204;
     // 昵称不符合规范，字符大于1小于6
     const NICK_NOT = -1009;
     // 图片验证码码错误
@@ -73,7 +79,8 @@ class ResponseCode
         self::NOT_HAVE_MESSAGE_CODE => '没有短信验证码',
         self::TELEPHONE_ERROR => '电话号码错误',
         self::MESSAGE_CODE_ERROR => '短信验证码错误',
-        self::TELEPHONE_REGISTERED => '电话号码已经注册',
+        self::TELEPHONE_REGISTERED => '电话号码已经注册或存在',
+        self::EMAIL_REGISTERED => '邮箱地址已经注册或存在',
         self::MESSAGE_CODE_IS_SEND => '短信验证已经发送,请勿重复发送',
         self::MESSAGE_CODE_NOT_SEND => '短信验证码尚未发送',
         self::MESSAGE_CODE_EXPIRED => '短信验证码已过期',
@@ -92,5 +99,7 @@ class ResponseCode
         self::PASSWORD_AUTHENTICATION_FAILED => '用户名或密码不正确',
         self::NOT_LOGIN => '用户未登录',
         self::ERROR_IN_TIME_FORMAT => '时间格式错误',
+        self::EMAIL_ERROR => '邮箱地址错误',
+        self::CODE_NOT_SEND => '验证码尚未发送',
     ];
 }

@@ -46,6 +46,20 @@ class Code extends Controller
         $img_code = $this->request->param('img_code', FALSE);
 
         $validate_code = new \app\api\validate\Code();
-        return $validate_code->code_tel($tel, $img_code);
+        return $validate_code->send_code($tel, $img_code, 'tel');
+    }
+
+    /**
+     * /api/code/email
+     * 发送邮箱验证码
+     * @return \think\response\Json
+     */
+    public function email ()
+    {
+        $email = $this->request->param('email', FALSE);
+        $img_code = $this->request->param('img_code', FALSE);
+
+        $validate_code = new \app\api\validate\Code();
+        return $validate_code->send_code($email, $img_code, 'email');
     }
 }

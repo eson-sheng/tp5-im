@@ -21,24 +21,35 @@ use think\Validate;
 class Code extends Validate
 {
     /**
-     * 检查手机发送验证码逻辑
-     * @param $tel
+     * 检查发送消息验证码逻辑
+     * @param $param
      * @param $img_code
+     * @param string $type
      * @return \think\response\Json
      */
-    public function code_tel ($tel, $img_code)
+    public function send_code ($param, $img_code, $type = '')
     {
         $session = &SessionTools::get('api');
 
         /*图形验证码,电话号码必传*/
-        if (!$img_code && !$tel) {
+        if (!$img_code && !$param) {
             return ResponseTools::return_error(ResponseCode::PARAMETER_INCOMPLETENESS);
         }
 
-        /*判断手机号是否正确*/
-        if ($this->checkout_tel($tel)) {
-            return ResponseTools::return_error(ResponseCode::TELEPHONE_ERROR);
+        if ($type == 'tel') {
+            /*判断手机号是否正确*/
+            if ($this->checkout_tel($param)) {
+                return ResponseTools::return_error(ResponseCode::TELEPHONE_ERROR);
+            }
         }
+
+        if ($type == 'email') {
+            /*判断手机号是否正确*/
+            if ($this->checkout_email($param)) {
+                return ResponseTools::return_error(ResponseCode::EMAIL_ERROR);
+            }
+        }
+
 
         /*检查是否请求图形验证*/
         if (empty($session['check_img_code_time'])) {
@@ -61,14 +72,28 @@ class Code extends Validate
             return ResponseTools::return_error(ResponseCode::IMG_CODE_ERROR);
         }
 
-        /*判断验证码是否重复*/
         $code_model = new \app\api\model\Code();
-        if ($code_model->send_tel_code($tel)) {
-            unset($session['check_img_code_time']);
-            return ResponseTools::return_error(ResponseCode::SUCCESS,[
-                'type'=>1,
-                'tip'=>'验证码已经发送',
-            ]);
+
+        /*判断验证码是否重复*/
+        if ($type == 'tel') {
+            if ($code_model->send_code($param, 'mobile')) {
+                unset($session['check_img_code_time']);
+                return ResponseTools::return_error(ResponseCode::SUCCESS, [
+                    'type' => 1,
+                    'tip' => '验证码已经发送',
+                ]);
+            }
+        }
+
+        /*判断验证码是否重复*/
+        if ($type == 'email') {
+            if ($code_model->send_code($param, 'email')) {
+                unset($session['check_img_code_time']);
+                return ResponseTools::return_error(ResponseCode::SUCCESS, [
+                    'type' => 1,
+                    'tip' => '验证码已经发送',
+                ]);
+            }
         }
 
         return ResponseTools::return_error($code_model->errno);
@@ -86,6 +111,17 @@ class Code extends Validate
     }
 
     /**
+     * 检查是否正确的邮箱地址
+     * @param string $email
+     * @return bool
+     */
+    public function checkout_email ($email)
+    {
+        $pattern = '/\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/';
+        return preg_match($pattern, $email) ? FALSE : TRUE;
+    }
+
+    /**
      * 检查是否正确的时间
      * @param $time
      * @return bool
@@ -97,18 +133,21 @@ class Code extends Validate
     }
 
     /**
-     * 检查短信验证码
-     * @param $tel
+     * 检查消息验证码
+     * @param $param
      * @param $code
+     * @param string $type
      * @return bool|\think\response\Json
      */
-    public function checkout_tel_code ($tel, $code)
+    public function checkout_code ($param, $code, $type = '')
     {
         $session = &SessionTools::get('api');
 
         /*检查过期时间是否存在*/
-        if (empty($session['check_code_time'])) {
-            return ResponseTools::return_error(ResponseCode::MESSAGE_CODE_NOT_SEND);
+        if (empty($session['check_code_time']) ||
+            empty($session[$type])
+        ) {
+            return ResponseTools::return_error(ResponseCode::CODE_NOT_SEND);
         }
 
         /*检查验证码是否过期*/
@@ -118,7 +157,7 @@ class Code extends Validate
         }
 
         /*检查是否是发送的手机号*/
-        if ($tel != $session['mobile']) {
+        if ($param != $session[$type]) {
             return ResponseTools::return_error(ResponseCode::TELEPHONE_ERROR);
         }
 

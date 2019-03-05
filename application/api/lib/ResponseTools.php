@@ -41,6 +41,15 @@ class ResponseTools
             $status = true;
         }
 
+        if ($errno == null) {
+            return json([
+                'errno' => 0,
+                'data' => [],
+//            'status' => $status,
+                'error_msg' => '系统异常',
+            ]);
+        }
+
         $error_msg = ResponseCode::CODE_MAP[$errno];
         return json([
             'errno' => $errno,

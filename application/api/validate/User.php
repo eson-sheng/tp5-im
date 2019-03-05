@@ -92,7 +92,7 @@ class User extends Validate
         }
 
         /*判断性别参数是否正确*/
-        if (!in_array(intval($sex), [0, 1])) {
+        if (!in_array(intval($sex), [0, 1, 2])) {
             return ResponseTools::return_error(ResponseCode::INCORRECT_PARAMETER);
         }
 
@@ -108,7 +108,7 @@ class User extends Validate
         }
 
         /*检查短信验证码合法性*/
-        $ret = $code_validate->checkout_tel_code($tel, $code);
+        $ret = $code_validate->checkout_code($tel, $code, 'mobile');
         if ($ret) {
             return $ret;
         }
@@ -162,7 +162,7 @@ class User extends Validate
         }
 
         /*检查短信验证码合法性*/
-        $ret = $code_validate->checkout_tel_code($tel, $code);
+        $ret = $code_validate->checkout_code($tel, $code, 'mobile');
         if ($ret) {
             return $ret;
         }
@@ -289,6 +289,78 @@ class User extends Validate
             $sign,
             $base64
         );
+        return ResponseTools::return_error($user_model->error, $data);
+    }
+
+    /**
+     * 验证修改手机号或邮箱
+     * @param $param
+     * @param $code
+     * @param string $type
+     * @return bool|\think\response\Json
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
+     */
+    public function update_for_tel_or_email ($param, $code, $type = '')
+    {
+        /*检查是否登录 - 未登录*/
+        if (!ResponseTools::checkout_login()) {
+            return ResponseTools::return_error(ResponseCode::NOT_LOGIN);
+        }
+
+        /*检查必要参数*/
+        if (!$param || !$code) {
+            return ResponseTools::return_error(ResponseCode::PARAMETER_INCOMPLETENESS);
+        }
+
+        $user_model = new \app\api\model\User();
+
+        /*电话号码修改验证逻辑*/
+        if ($type == 'tel') {
+            /*检查手机号码是否合法*/
+            $code_validate = new Code();
+            if ($code_validate->checkout_tel($param)) {
+                return ResponseTools::return_error(ResponseCode::TELEPHONE_ERROR);
+            }
+
+            /*检查手机号码是否注册*/
+            if (\app\api\model\User::get(['tel' => $param])) {
+                return ResponseTools::return_error(ResponseCode::TELEPHONE_REGISTERED);
+            }
+
+            /*检查短信验证码合法性*/
+            $ret = $code_validate->checkout_code($param, $code, 'mobile');
+            if ($ret) {
+                return $ret;
+            }
+
+            /*修改手机号码或邮箱*/
+            $data = $user_model->update_for_tel_or_email($param, 'tel');
+        }
+
+        /*邮箱修改验证逻辑*/
+        if ($type == 'email') {
+            /*检查邮箱是否合法*/
+            $code_validate = new Code();
+            if ($code_validate->checkout_email($param)) {
+                return ResponseTools::return_error(ResponseCode::EMAIL_ERROR);
+            }
+
+            /*检查手机号码是否注册*/
+            if (\app\api\model\User::get(['email' => $param])) {
+                return ResponseTools::return_error(ResponseCode::EMAIL_REGISTERED);
+            }
+
+            /*检查短信验证码合法性*/
+            $ret = $code_validate->checkout_code($param, $code, 'email');
+            if ($ret) {
+                return $ret;
+            }
+
+            /*修改手机号码或邮箱*/
+            $data = $user_model->update_for_tel_or_email($param, 'email');
+        }
+
         return ResponseTools::return_error($user_model->error, $data);
     }
 }

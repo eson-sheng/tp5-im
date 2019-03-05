@@ -125,6 +125,7 @@ class User extends Model
         $log = json_encode($IMApi_res);
         \SeasLog::info("\ncreateUserIds:\n{$log}\n", [], "IMApi_res");
 
+        $user_res['IMApi_res'] = $IMApi_res;
         return $user_res;
     }
 
@@ -271,6 +272,60 @@ class User extends Model
 
         if ($pic) {
             $user_obj->pic = $pic;
+        }
+
+        if ($user_obj->save()) {
+            /*返回错误码*/
+            $this->error = ResponseCode::SUCCESS;
+        } else {
+            $this->error = ResponseCode::DATA_DUPLICATION;
+            return [];
+        }
+
+        /*业务 - 更新用户名片*/
+        $IMApi_model = new IMApi();
+        $IMApi_res = $IMApi_model->updateUinfo(
+            $user_obj->acid,
+            $user_obj->nick,
+            $user_obj->pic,
+            $user_obj->sign,
+            $user_obj->email,
+            strtotime($user_obj->birthday),
+            $user_obj->tel,
+            $user_obj->sex,
+            $user_obj->toJson()
+        );
+        /*日志记录*/
+        $log = json_encode($IMApi_res);
+        \SeasLog::info("\nupdateUinfo:\n{$log}\n", [], "IMApi_res");
+
+        return $user_obj->hidden([
+            'password',
+            'status',
+            'update_time',
+        ])->toArray();
+    }
+
+    /**
+     * 修改手机号或邮箱
+     * @param $param
+     * @param string $type
+     * @return array
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
+     */
+    public function update_for_tel_or_email ($param, $type = '')
+    {
+        $session = &SessionTools::get('api');
+        $uid = $session['info']['id'];
+        $user_obj = User::get($uid);
+
+        if ($type == 'tel') {
+            $user_obj->tel = $param;
+        }
+
+        if ($type == 'email') {
+            $user_obj->email = $param;
         }
 
         if ($user_obj->save()) {

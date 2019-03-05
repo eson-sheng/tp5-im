@@ -56,4 +56,14 @@ class VerifyCode
     {
         /*短信服务尚未申请*/
     }
+
+    /**
+     * @FIXME
+     * @param $email
+     * @param $code
+     */
+    public function sendEmailMes ($email, $code)
+    {
+        /*邮箱服务服务尚未申请*/
+    }
 }

@@ -136,4 +136,36 @@ class User extends Controller
             $base64
         );
     }
+
+    /**
+     * /api/user/update_for_tel
+     * 修改手机号
+     * @return bool|\think\response\Json
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
+     */
+    public function update_for_tel ()
+    {
+        $tel = $this->request->param('tel', FALSE);
+        $code = $this->request->param('code', FALSE);
+
+        $validate_user = new \app\api\validate\User();
+        return $validate_user->update_for_tel_or_email($tel, $code, 'tel');
+    }
+
+    /**
+     * /api/user/update_for_email
+     * 修改邮箱
+     * @return bool|\think\response\Json
+     * @throws \think\Exception
+     * @throws \think\exception\DbException
+     */
+    public function update_for_email ()
+    {
+        $email = $this->request->param('email', FALSE);
+        $code = $this->request->param('code', FALSE);
+
+        $validate_user = new \app\api\validate\User();
+        return $validate_user->update_for_tel_or_email($email, $code, 'email');
+    }
 }
