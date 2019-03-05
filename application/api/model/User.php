@@ -166,6 +166,15 @@ class User extends Model
         $session['is_login'] = TRUE;
         $session['info'] = $user_res;
         $this->error = ResponseCode::SUCCESS;
+
+        /*业务 - 登录需要重新更新token*/
+        $IMApi_model = new IMApi();
+        $IMApi_res = $IMApi_model->updateUserToken($user_res['acid']);
+        /*日志记录*/
+        $log = json_encode($IMApi_res);
+        \SeasLog::info("\nupdateUserToken:\n{$log}\n", [], "IMApi_res");
+
+        $user_res['IMApi_res'] = $IMApi_res;
         return $user_res;
     }
 
@@ -299,11 +308,13 @@ class User extends Model
         $log = json_encode($IMApi_res);
         \SeasLog::info("\nupdateUinfo:\n{$log}\n", [], "IMApi_res");
 
-        return $user_obj->hidden([
+        $user_res = $user_obj->hidden([
             'password',
             'status',
             'update_time',
         ])->toArray();
+        $user_res['IMApi_res'] = $IMApi_res;
+        return $user_res;
     }
 
     /**
@@ -353,10 +364,12 @@ class User extends Model
         $log = json_encode($IMApi_res);
         \SeasLog::info("\nupdateUinfo:\n{$log}\n", [], "IMApi_res");
 
-        return $user_obj->hidden([
+        $user_res = $user_obj->hidden([
             'password',
             'status',
             'update_time',
         ])->toArray();
+        $user_res['IMApi_res'] = $IMApi_res;
+        return $user_res;
     }
 }
