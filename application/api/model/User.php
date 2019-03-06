@@ -386,14 +386,20 @@ class User extends Model
             ->whereOr('email', 'like',"%{$search}%")
             ->whereOr('nick', 'like',"%{$search}%")
             ->whereOr('acid', 'like',"%{$search}%")
-            ->column('nick,acid,tel,email');
+            ->column('nick,acid,tel,email', 'id');
 
         if (!$user_res) {
             $this->error = ResponseCode::NOT_HAVE_USERNAME;
             return [];
         }
 
+        /*数据修改去除关联键值为索引键值*/
+        $arr = [];
+        foreach ($user_res AS $k => $v) {
+            $arr[] = $v;
+        }
+
         $this->error = ResponseCode::SUCCESS;
-        return $user_res;
+        return $arr;
     }
 }
