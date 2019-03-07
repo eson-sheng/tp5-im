@@ -53,8 +53,13 @@ server {
 
 ```php
 <?php
+
 $SeasLog_base_path = __DIR__ . '/../runtime/seaslog';
 SeasLog::setBasePath($SeasLog_base_path);
+
+if (!empty($_COOKIE['PHPSESSID'])) {
+    SeasLog::setRequestID($_COOKIE['PHPSESSID']);
+}
 
 return [
     // 应用调试模式
