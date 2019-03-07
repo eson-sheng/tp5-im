@@ -37,6 +37,9 @@ class ResponseTools
      */
     public static function return_error($errno, $data = [], $status = false)
     {
+        header("Access-Control-Allow-Origin:*");//允许所有来源访问
+        header("Access-Control-Allow-Method:POST,GET");//允许访问的方式
+
         if ($errno == ResponseCode::SUCCESS) {
             $status = true;
         }
