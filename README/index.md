@@ -64,6 +64,8 @@ if (!empty($_COOKIE['PHPSESSID'])) {
 return [
     // 应用调试模式
     'app_debug'                 => true,
+    // 客户端的域名地址
+    'client_host'               => 'http://???',
     // 网易云信AppKey
     'IM_AppKey'                 => '***',
     // 网易云信AppSecret
