@@ -229,11 +229,17 @@ class User extends Model
         $user_obj = User::get(['acid' => $acid]);
         if ($user_obj) {
             $this->error = ResponseCode::SUCCESS;
-            return $user_obj->hidden([
+            $tmp_user = $user_obj->hidden([
                 'password',
                 'status',
                 'update_time',
             ])->toArray();
+
+            $request = \think\Request::instance();
+            $domain = $request->domain();
+            !empty($tmp_user['pic']) ? $tmp_user['pic'] = "{$domain}{$tmp_user['pic']}" : $tmp_user['pic'] = '';
+
+            return $tmp_user;
         }
         $this->error = ResponseCode::NOT_HAVE_USERNAME;
         return [];
