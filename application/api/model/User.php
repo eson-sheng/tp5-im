@@ -161,6 +161,10 @@ class User extends Model
             return [];
         }
 
+        $request = \think\Request::instance();
+        $domain = $request->domain();
+        !empty($user_res['pic']) ? $user_res['pic'] = "{$domain}{$user_res['pic']}" : $user_res['pic'] = '';
+
         unset($user_res['password'],$user_res['status'],$user_res['update_time']);
         $session = &SessionTools::get('api');
         $session['is_login'] = TRUE;
