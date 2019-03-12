@@ -56,4 +56,26 @@ class Code
         }
         return TRUE;
     }
+
+    /**
+     * 执行发送验证码信息 - 使用云信接口方式
+     * @param $tel
+     * @return array
+     */
+    public function yx_send_code ($tel)
+    {
+        /*业务 - 使用云信发送手机号*/
+        $IMApi_model = new IMApi();
+        $IMApi_res = $IMApi_model->sendSmsCode($tel);
+        /*日志记录*/
+        $log = json_encode($IMApi_res);
+        \SeasLog::info("\nsendSmsCode:\n{$log}\n", [], "IMApi_res");
+
+        /*记录会话时间*/
+        $session = &SessionTools::get('api');
+        $session['mobile'] = $tel;
+        $session['check_code_time'] = time();
+
+        return $IMApi_res;
+    }
 }

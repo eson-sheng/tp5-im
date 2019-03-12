@@ -108,7 +108,8 @@ class User extends Validate
         }
 
         /*检查短信验证码合法性*/
-        $ret = $code_validate->checkout_code($tel, $code, 'mobile');
+//        $ret = $code_validate->checkout_code($tel, $code, 'mobile');
+        $ret = $code_validate->yx_checkout_code($tel, $code);
         if ($ret) {
             return $ret;
         }
@@ -162,7 +163,8 @@ class User extends Validate
         }
 
         /*检查短信验证码合法性*/
-        $ret = $code_validate->checkout_code($tel, $code, 'mobile');
+//        $ret = $code_validate->checkout_code($tel, $code, 'mobile');
+        $ret = $code_validate->yx_checkout_code($tel, $code);
         if ($ret) {
             return $ret;
         }
@@ -329,7 +331,8 @@ class User extends Validate
             }
 
             /*检查短信验证码合法性*/
-            $ret = $code_validate->checkout_code($param, $code, 'mobile');
+//            $ret = $code_validate->checkout_code($param, $code, 'mobile');
+            $ret = $code_validate->yx_checkout_code($param, $code);
             if ($ret) {
                 return $ret;
             }

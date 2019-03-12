@@ -11,6 +11,7 @@ namespace app\api\validate;
 use app\api\lib\ResponseCode;
 use app\api\lib\ResponseTools;
 use app\api\lib\SessionTools;
+use app\api\model\IMApi;
 use think\Validate;
 
 /**
@@ -76,13 +77,22 @@ class Code extends Validate
 
         /*判断验证码是否重复*/
         if ($type == 'tel') {
-            if ($code_model->send_code($param, 'mobile')) {
-                unset($session['check_img_code_time']);
-                return ResponseTools::return_error(ResponseCode::SUCCESS, [
-                    'type' => 1,
-                    'tip' => '验证码已经发送',
-                ]);
-            }
+
+            /*通用方式发送短信*/
+//            if ($code_model->send_code($param, 'mobile')) {
+//                unset($session['check_img_code_time']);
+//                return ResponseTools::return_error(ResponseCode::SUCCESS, [
+//                    'type' => 1,
+//                    'tip' => '验证码已经发送',
+//                ]);
+//            }
+
+            /*网易云信接口发送短信*/
+            $code_model->yx_send_code($param);
+            return ResponseTools::return_error(ResponseCode::SUCCESS, [
+                'type' => 1,
+                'tip' => '验证码已经发送',
+            ]);
         }
 
         /*判断验证码是否重复*/
@@ -162,6 +172,48 @@ class Code extends Validate
         }
 
         if ($code != $session['check_code']) {
+            return ResponseTools::return_error(ResponseCode::MESSAGE_CODE_ERROR);
+        }
+
+        return FALSE;
+    }
+
+    /**
+     * 检查消息验证码 - 使用云信方式校验
+     * @param $tel
+     * @param $code
+     * @return bool|\think\response\Json
+     */
+    public function yx_checkout_code ($tel, $code)
+    {
+        $session = &SessionTools::get('api');
+
+        /*检查过期时间是否存在*/
+        if (empty($session['check_code_time']) ||
+            empty($session['mobile'])
+        ) {
+            return ResponseTools::return_error(ResponseCode::CODE_NOT_SEND);
+        }
+
+        /*检查验证码是否过期*/
+        $out_time = time() + 600;
+        if ($session['check_code_time'] > $out_time) {
+            return ResponseTools::return_error(ResponseCode::MESSAGE_CODE_EXPIRED);
+        }
+
+        /*检查是否是发送的手机号*/
+        if ($tel != $session['mobile']) {
+            return ResponseTools::return_error(ResponseCode::TELEPHONE_ERROR);
+        }
+
+        /*业务 - 使用云信校验短信验证码*/
+        $IMApi_model = new IMApi();
+        $IMApi_res = $IMApi_model->verifycode($tel, $code);
+        /*日志记录*/
+        $log = json_encode($IMApi_res);
+        \SeasLog::info("\nverifycode:\n{$log}\n", [], "IMApi_res");
+
+        if ($IMApi_res['code'] != 200) {
             return ResponseTools::return_error(ResponseCode::MESSAGE_CODE_ERROR);
         }
 
