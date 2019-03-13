@@ -70,7 +70,7 @@ class ResponseCode
     // 用户未登录
     const NOT_LOGIN = -1403;
     // 时间格式错误
-    const ERROR_IN_TIME_FORMAT = -1021;
+    const ERROR_IN_TIME_FORMAT = -1022;
 
     const CODE_MAP = [
         self::SUCCESS => 'OKAY',
