@@ -255,7 +255,7 @@ class User extends Validate
         /*性别检查*/
         if ($sex) {
             /*判断性别参数是否正确*/
-            if (!in_array(intval($sex), [0, 1])) {
+            if (!in_array(intval($sex), [0, 1, 2])) {
                 return ResponseTools::return_error(ResponseCode::INCORRECT_PARAMETER);
             }
         }
