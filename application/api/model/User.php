@@ -278,7 +278,7 @@ class User extends Model
         }
 
         if (!empty($sex)) {
-            $user_obj->nick = $sex;
+            $user_obj->sex = $sex;
         }
 
         if ($birthday) {
