@@ -393,8 +393,8 @@ class User extends Model
         $user = new User();
         $user_res = $user
             ->whereOr('tel', 'like',"%{$search}%")
-            ->whereOr('email', 'like',"%{$search}%")
-            ->whereOr('nick', 'like',"%{$search}%")
+//            ->whereOr('email', 'like',"%{$search}%")
+//            ->whereOr('nick', 'like',"%{$search}%")
             ->whereOr('acid', 'like',"%{$search}%")
             ->column('nick,acid,tel,email', 'id');
 
