@@ -91,7 +91,7 @@ class Code extends Validate
             $IMApi_res = $code_model->yx_send_code($param);
             return ResponseTools::return_error(ResponseCode::SUCCESS, [
                 'type' => 1,
-                'tip' => '验证码已发送，但不保证服务商发送成功！',
+                'tip' => '验证码已经发送！',
                 'IMApi_res' => $IMApi_res,
             ]);
         }
