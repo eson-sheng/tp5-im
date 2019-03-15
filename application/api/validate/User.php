@@ -142,9 +142,9 @@ class User extends Validate
     public function forget_for_tel ($tel, $code, $password)
     {
         /*检查是否登录 - 已登录*/
-        if (ResponseTools::checkout_login()) {
-            return ResponseTools::return_error(ResponseCode::USER_IS_LOGIN);
-        }
+//        if (ResponseTools::checkout_login()) {
+//            return ResponseTools::return_error(ResponseCode::USER_IS_LOGIN);
+//        }
 
         /*检查必要参数*/
         if (!$tel || !$code || !$password) {
