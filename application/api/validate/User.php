@@ -262,9 +262,10 @@ class User extends Validate
 
         /*生日时间检查格式是否正确*/
         if ($birthday) {
+            $int = strtotime($birthday);
             /*检查手机号码是否合法*/
             $code_validate = new Code();
-            if ($code_validate->checkout_time($birthday)) {
+            if ($code_validate->checkout_time($birthday) || $int < 1) {
                 return ResponseTools::return_error(ResponseCode::ERROR_IN_TIME_FORMAT);
             }
         }
