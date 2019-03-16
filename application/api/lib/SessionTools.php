@@ -22,11 +22,14 @@ class SessionTools
         }
 
         /*更新用户信息*/
-        if (!empty($_SESSION['api']['info'])){
+        if (!empty($_SESSION['api']['info']['id'])){
             $uid = $_SESSION['api']['info']['id'];
-            $user_res = \app\api\model\User::get($uid)->toArray();
-            unset($user_res['password'],$user_res['status'],$user_res['update_time']);
-            $_SESSION['api']['info'] = $user_res;
+            $user_obj = \app\api\model\User::get($uid);
+            if ($user_obj) {
+                $user_res = $user_obj->toArray();
+                unset($user_res['password'],$user_res['status'],$user_res['update_time']);
+                $_SESSION['api']['info'] = $user_res;
+            }
         }
     }
 
