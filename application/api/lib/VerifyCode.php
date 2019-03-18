@@ -23,7 +23,7 @@ class VerifyCode
     public function get_code ($length = 6)
     {
         $str = null;
-        $strPol = "0123456789ABCDEFGHGKLMNPQRSUVWXYZabcdefghigklmnpqrsuvwxyz";
+        $strPol = "ABCDEFGHGKLMNPQRSUVWXYZabcdefghigkmnpqrsuvwxyz";
         $max = strlen($strPol) - 1;
         for ($i = 0; $i < $length; $i++) {
             $str .= $strPol[rand(0, $max)]; //rand($min,$max)生成介于min和max两个数之间的一个随机整数
