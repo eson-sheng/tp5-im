@@ -179,6 +179,10 @@ class User extends Model
         \SeasLog::info("\nupdateUserToken:\n{$log}\n", [], "IMApi_res");
 
         $user_res['IMApi_res'] = $IMApi_res;
+
+        /*增加返回PHP_SESSION_ID*/
+        $user_res['PHP_SESSION_ID'] = session_id();
+
         return $user_res;
     }
 
