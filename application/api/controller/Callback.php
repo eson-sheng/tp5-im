@@ -18,8 +18,45 @@ class Callback extends Controller
 
     public function index ()
     {
+        /*判断是否是推送的消息*/
         $bool = $this->CheckSumBuilder();
-        var_dump($bool);
+
+        if ($bool) {
+
+            $json_str = file_get_contents("php://input");
+            \SeasLog::info("\ncallback:\n{$json_str}\n", [], "IMApi_res");
+            $arr = json_decode($json_str, true);
+
+            /*业务处理*/
+            switch ($arr['eventType']) {
+                case 1:
+                    # P2P消息回调
+                    break;
+
+                case 2:
+                    # 群组消息回调
+                    break;
+
+                case 3:
+                    # 用户资料变更回调
+                    break;
+
+                case 4:
+                    # 添加好友回调
+                    break;
+
+                case 5:
+                    # 删除好友回调
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
+        return json([
+            "errCode" => 0
+        ]);
     }
 
     /**
@@ -40,7 +77,7 @@ class Callback extends Controller
             $this->CheckSum = $_SERVER['HTTP_CHECKSUM'];
         }
 
-        $AppSecret = \think\Config::get()['im_appkey'];
+        $AppSecret = \think\Config::get()['im_appsecret'];
         $join_string = $AppSecret . $this->Nonce . $this->CurTime;
         $CheckSum = sha1($join_string);
 
