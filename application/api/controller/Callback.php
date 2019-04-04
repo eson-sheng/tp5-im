@@ -8,6 +8,7 @@
 
 namespace app\api\controller;
 
+use app\api\model\IGtApi;
 use think\Controller;
 
 class Callback extends Controller
@@ -33,10 +34,12 @@ class Callback extends Controller
                 ]);
             }
 
+            $IGtApi_model = new IGtApi();
             /*业务处理*/
             switch ($arr['eventType']) {
                 case 1:
                     # P2P消息回调
+                    $IGtApi_model->pushMessageToSingle($arr['to']);
                     break;
 
                 case 2:
