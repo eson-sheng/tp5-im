@@ -56,7 +56,7 @@ class IGtApi
         );
 
         //消息模版：
-        $template = $this->IGtLinkTemplateDemo();
+        $template = $this->IGtNotificationTemplate();
 
         $message = new \IGtSingleMessage();
         $message->set_isOffline(true);//是否离线
@@ -75,7 +75,7 @@ class IGtApi
         return $ret;
     }
 
-    private function IGtLinkTemplateDemo(){
+    private function IGtLinkTemplate(){
         $template =  new \IGtLinkTemplate();
         $template ->set_appId($this->AppID);//应用appid
         $template ->set_appkey($this->Appkey);//应用appkey
@@ -85,8 +85,24 @@ class IGtApi
         $template ->set_isRing(true);//是否响铃
         $template ->set_isVibrate(true);//是否震动
         $template ->set_isClearable(true);//通知栏是否可清除
-//        $template ->set_url("http://shengxuecheng.cn/");//打开连接地址
+        $template ->set_url("http://shengxuecheng.cn/");//打开连接地址
 //        $template->set_duration(BEGINTIME,ENDTIME); //设置ANDROID客户端在此时间区间内展示消息
+        return $template;
+    }
+
+    private function IGtNotificationTemplate(){
+        $template =  new \IGtNotificationTemplate();
+        $template->set_appId($this->AppID);//应用appid
+        $template->set_appkey($this->Appkey);//应用appkey
+        $template->set_transmissionType(1);//透传消息类型
+        $template->set_transmissionContent(" ");//透传内容
+        $template->set_title("通知新消息");//通知栏标题
+        $template->set_text("您有一条新消息，请注意查看！");//通知栏内容
+        $template->set_logo("http://wwww.igetui.com/logo.png");//通知栏logo
+        $template->set_isRing(true);//是否响铃
+        $template->set_isVibrate(true);//是否震动
+        $template->set_isClearable(true);//通知栏是否可清除
+        //$template->set_duration(BEGINTIME,ENDTIME); //设置ANDROID客户端在此时间区间内展示消息
         return $template;
     }
 
