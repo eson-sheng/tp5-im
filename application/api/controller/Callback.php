@@ -27,6 +27,12 @@ class Callback extends Controller
             \SeasLog::info("\ncallback:\n{$json_str}\n", [], "IMApi_res");
             $arr = json_decode($json_str, true);
 
+            if (empty($arr['eventType'])) {
+                return json([
+                    "errCode" => 0
+                ]);
+            }
+
             /*业务处理*/
             switch ($arr['eventType']) {
                 case 1:
