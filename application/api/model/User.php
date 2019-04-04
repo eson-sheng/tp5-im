@@ -416,4 +416,18 @@ class User extends Model
         $this->error = ResponseCode::SUCCESS;
         return $arr;
     }
+
+    /**
+     * 绑定推送别名为网易云信cid
+     * @param $cid
+     * @return mixed|null
+     */
+    public function bindAliasForIGt ($cid)
+    {
+        $IGtApi_model = new IGtApi();
+        $ret = $IGtApi_model->aliasBind($cid);
+
+        $this->error = ResponseCode::SUCCESS;
+        return $ret;
+    }
 }

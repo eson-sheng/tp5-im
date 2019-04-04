@@ -390,4 +390,27 @@ class User extends Validate
         $data = $user_model->search($search);
         return ResponseTools::return_error($user_model->error, $data);
     }
+
+    /**
+     * 验证绑定推送别名
+     * @param $cid
+     * @return \think\response\Json
+     */
+    public function bindAliasForIGt ($cid)
+    {
+        /*检查是否登录 - 未登录*/
+        if (!ResponseTools::checkout_login()) {
+            return ResponseTools::return_error(ResponseCode::NOT_LOGIN);
+        }
+
+        /*参数必传*/
+        if (!$cid) {
+            return ResponseTools::return_error(ResponseCode::PARAMETER_INCOMPLETENESS);
+        }
+
+        /*模块查找用户*/
+        $user_model = new \app\api\model\User();
+        $data = $user_model->bindAliasForIGt($cid);
+        return ResponseTools::return_error($user_model->error, $data);
+    }
 }

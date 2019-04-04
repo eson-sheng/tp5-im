@@ -9,6 +9,8 @@
 namespace app\api\model;
 require_once __DIR__ . "/GETUI_PHP_SDK_4.1.0.0/IGt.Push.php";
 
+use app\api\lib\SessionTools;
+
 class IGtApi
 {
     private $AppID;
@@ -23,6 +25,26 @@ class IGtApi
         $this->AppSecret = \think\Config::get()['igt_appsecret'];
         $this->Appkey = \think\Config::get()['igt_appkey'];
         $this->MasterSecret = \think\Config::get()['igt_mastersecret'];
+    }
+
+    public function aliasBind ($cid)
+    {
+        $igt = new \IGeTui(
+            $this->host,
+            $this->Appkey,
+            $this->MasterSecret
+        );
+
+        $session = &SessionTools::get('api');
+        $ret = $igt->bindAlias(
+            $this->AppID,
+            $session['info']['acid'],
+            $cid
+        );
+        $info = print_r($ret,1);
+        \SeasLog::info("\nbindAlias:\n{$info}\n", [], "IGtApi_res");
+
+        return $ret;
     }
 
     public function pushMessageToSingle ($alias)
@@ -49,7 +71,7 @@ class IGtApi
 
         $ret = $igt->pushMessageToSingle($message, $target);
         $info = print_r($ret,1);
-        \SeasLog::info("\npushMessageToSingle:\n{$info}\n", [], "IGtApi_res");
+        \SeasLog::info("\npushMessageToSingle:{$alias}\n{$info}\n", [], "IGtApi_res");
         return $ret;
     }
 

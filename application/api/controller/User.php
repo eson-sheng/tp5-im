@@ -181,4 +181,17 @@ class User extends Controller
         $validate_user = new \app\api\validate\User();
         return $validate_user->search($search);
     }
+
+    /**
+     * /api/user/bindAliasForIGt
+     * 绑定推送别名
+     * @return \think\response\Json
+     */
+    public function bindAliasForIGt()
+    {
+        $cid = $this->request->param('cid', FALSE);
+
+        $validate_user = new \app\api\validate\User();
+        return $validate_user->bindAliasForIGt($cid);
+    }
 }
