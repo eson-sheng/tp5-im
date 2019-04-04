@@ -148,7 +148,7 @@ Class IGeTui
         // 计算sign值
         $sign = md5($this->appkey . $timeStamp . $this->masterSecret);
         //
-        var_dump($sign);
+//        var_dump($sign);
         $params = array();
 
         $params["action"] = "connect";
