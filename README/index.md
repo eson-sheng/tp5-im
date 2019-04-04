@@ -65,13 +65,25 @@ return [
     // 应用调试模式
     'app_debug'                 => true,
     // 客户端的域名地址
-    'client_host'               => 'http://???',
-    // 网易云信AppKey
-    'IM_AppKey'                 => '***',
-    // 网易云信AppSecret
-    'IM_AppSecret'              => '***',
+    'client_host'               => 'http(s)://???',
     // SeasLog日志配置
     'SeasLog_base_path'         => $SeasLog_base_path,
+
+    // 网易云信 配置
+    /**
+     * @link https://app.yunxin.163.com/index
+     */
+    'IM_AppKey'                 => '***',
+    'IM_AppSecret'              => '***',
+
+    // IGt 推送配置
+    /**
+     * @link https://dev.getui.com/
+     */
+    'IGt_AppID'                 => '***',
+    'IGt_AppSecret'             => '***',
+    'IGt_AppKey'                => '***',
+    'IGt_MasterSecret'          => '***',
 ];
 ```
 
