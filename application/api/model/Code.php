@@ -68,8 +68,9 @@ class Code
         $IMApi_model = new IMApi();
         $IMApi_res = $IMApi_model->sendSmsCode($tel);
         /*日志记录*/
+        $raw = file_get_contents('php://input');
         $log = json_encode($IMApi_res);
-        \SeasLog::info("\nsendSmsCode:\n{$log}\n", [], "IMApi_res");
+        \SeasLog::info("\nsendSmsCode:\n{$log}\nraw:{$raw}\n", [], "IMApi_res");
 
         /*记录会话时间*/
         $session = &SessionTools::get('api');

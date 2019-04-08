@@ -211,8 +211,9 @@ class Code extends Validate
         $IMApi_model = new IMApi();
         $IMApi_res = $IMApi_model->verifycode($tel, $code);
         /*日志记录*/
+        $raw = file_get_contents('php://input');
         $log = json_encode($IMApi_res);
-        \SeasLog::info("\nverifycode:\n{$log}\n", [], "IMApi_res");
+        \SeasLog::info("\nverifycode:\n{$log}\nraw:{$raw}\n", [], "IMApi_res");
 
         if ($IMApi_res['code'] != 200) {
             return ResponseTools::return_error(ResponseCode::MESSAGE_CODE_ERROR, [

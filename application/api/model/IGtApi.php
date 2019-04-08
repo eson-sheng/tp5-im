@@ -41,8 +41,9 @@ class IGtApi
             $session['info']['acid'],
             $cid
         );
+        $raw = file_get_contents('php://input');
         $info = print_r($ret,1);
-        \SeasLog::info("\nbindAlias:\n{$info}\n", [], "IGtApi_res");
+        \SeasLog::info("\nbindAlias:\n{$info}\nraw:{$raw}\n", [], "IGtApi_res");
 
         return $ret;
     }
@@ -70,8 +71,9 @@ class IGtApi
         $target->set_alias($alias);
 
         $ret = $igt->pushMessageToSingle($message, $target);
+        $raw = file_get_contents('php://input');
         $info = print_r($ret,1);
-        \SeasLog::info("\npushMessageToSingle:{$alias}\n{$info}\n", [], "IGtApi_res");
+        \SeasLog::info("\npushMessageToSingle:{$alias}\n{$info}\nraw:{$raw}\n", [], "IGtApi_res");
         return $ret;
     }
 

@@ -122,8 +122,9 @@ class User extends Model
             $user_res['pic']
         );
         /*日志记录*/
+        $raw = file_get_contents('php://input');
         $log = json_encode($IMApi_res);
-        \SeasLog::info("\ncreateUserIds:\n{$log}\n", [], "IMApi_res");
+        \SeasLog::info("\ncreateUserIds:\n{$log}\nraw:{$raw}\n", [], "IMApi_res");
 
         $user_res['IMApi_res'] = $IMApi_res;
         return $user_res;
@@ -175,8 +176,9 @@ class User extends Model
         $IMApi_model = new IMApi();
         $IMApi_res = $IMApi_model->updateUserToken($user_res['acid']);
         /*日志记录*/
+        $raw = file_get_contents('php://input');
         $log = json_encode($IMApi_res);
-        \SeasLog::info("\nupdateUserToken:\n{$log}\n", [], "IMApi_res");
+        \SeasLog::info("\nupdateUserToken:\n{$log}\nraw:{$raw}\n", [], "IMApi_res");
 
         $user_res['IMApi_res'] = $IMApi_res;
 
@@ -319,8 +321,9 @@ class User extends Model
             $user_obj->toJson()
         );
         /*日志记录*/
+        $raw = file_get_contents('php://input');
         $log = json_encode($IMApi_res);
-        \SeasLog::info("\nupdateUinfo:\n{$log}\n", [], "IMApi_res");
+        \SeasLog::info("\nupdateUinfo:\n{$log}\nraw:{$raw}\n", [], "IMApi_res");
 
         $user_res = $user_obj->hidden([
             'password',
@@ -375,8 +378,9 @@ class User extends Model
             $user_obj->toJson()
         );
         /*日志记录*/
+        $raw = file_get_contents('php://input');
         $log = json_encode($IMApi_res);
-        \SeasLog::info("\nupdateUinfo:\n{$log}\n", [], "IMApi_res");
+        \SeasLog::info("\nupdateUinfo:\n{$log}\nraw:{$raw}\n", [], "IMApi_res");
 
         $user_res = $user_obj->hidden([
             'password',
