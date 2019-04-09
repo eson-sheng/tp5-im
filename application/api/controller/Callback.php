@@ -24,9 +24,9 @@ class Callback extends Controller
 
         if ($bool) {
 
-            $raw = file_get_contents('php://input');
             $json_str = file_get_contents("php://input");
-            \SeasLog::info("\ncallback:\n{$json_str}\nraw:{$raw}\n", [], "IMApi_res");
+            \SeasLog::info("\ncallback:\n{$json_str}\n", [], "IMApi_res");
+
             $arr = json_decode($json_str, true);
 
             if (empty($arr['eventType'])) {
