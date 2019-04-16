@@ -117,7 +117,7 @@ class Code extends Validate
      */
     public function checkout_tel ($tel)
     {
-        $pattern = '/^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57]|16[0-9])[0-9]{8}$/';
+        $pattern = '/^(0|86|17951)?(13[0-9]|15[012356789]|17[01678]|18[0-9]|14[57]|16[0-9])[0-9]{8}$/';
         return preg_match($pattern, $tel) ? FALSE : TRUE;
     }
 
